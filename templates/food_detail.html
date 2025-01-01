@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Asosiy taom ko'rinishi -->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <button class="btn btn-outline-success flex-shrink-0" type="submit" style="margin-bottom: 30px; margin-top: -15px; margin-left: -25px;">
+            <a href="{% url 'foods-url' %}">Foods</a>
+        </button>
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6">
+                {% if food.photo %}
+                    <img class="card-img-top mb-5 mb-md-0" src="{{ food.photo.url }}" style="width: 420px;" alt="{{ food.name }}" />
+                {% else %}
+                    <img class="card-img-top mb-5 mb-md-0" src="{% static 'images/no-image.jpg' %}" alt="Rasm mavjud emas" />
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                {% if food.is_food_of_day %}
+                <span class="badge badge-success">Food of the Day</span>
+                {% endif %}
+                <br>
+                <br>
+                <h2>Food Name: {{ food.name }}</h2>
+                <br>
+                {% if food.info %}
+                <h4>Discriptions:</h4>
+                    <p class="lead">{{ food.info }}</p>
+                {% endif %}
+
+                <!-- Taom tafsilotlari -->
+                <h4 class="mt-4">Taom tafsilotlari</h4>
+                <ul>
+                    {% if food.category %}
+                        <li><h5>Kategoriya: {{ food.category.name }}</h5></li>
+                        <div class="fs-5 mb-5">
+                            {% if food.discount_percent %}
+                            <li><h5>Price: <strong>${{ food.price }}</strong></h5></li>
+                            <li><h5>Discount: {{ food.discount_percent }}%</h5></li>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </ul>
+                
+                <!-- Savatga qo'shish -->
+                <form method="POST" action="{% url 'add_to_cart' food.id %}" class="d-flex">
+                    {% csrf_token %}
+                    <input class="form-control text-center me-3" name="quantity" type="number" value="1" min="1" style="max-width: 3rem" />
+                    <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                        <a href="{% url 'add_to_cart' food.id %}">Savatga qo'shish</a>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- O'xshash taomlar -->
+{% if related_foods %}
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-5">
+        <h2 class="fw-bolder mb-4">O'xshash taomlar</h2>
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for food in related_foods %}
+            <div class="col mb-5">
+                <div class="card h-100">
+                    {% if food.is_food_of_day %}
+                        <div class="badge bg-warning text-dark position-absolute" style="top: 0.5rem; right: 0.5rem">
+                            Kunning tanlangan taomi
+                        </div>
+                    {% endif %}
+                    
+                    {% if food.photo %}
+                        <img class="card-img-top" src="{{ food.photo.url }}" alt="{{ food.name }}" />
+                    {% else %}
+                        <img class="card-img-top" src="{% static 'images/no-image.jpg' %}" alt="Rasm mavjud emas" />
+                    {% endif %}
+                    
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <h5 class="fw-bolder">{{ food.name }}</h5>
+                            {% if food.discount_percent %}
+                                <span class="text-muted text-decoration-line-through">${{ food.price }}</span>
+                                <span>${{ food.discounted_price }}</span>
+                            {% else %}
+                                <span>${{ food.price }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                            <a class="btn btn-outline-dark mt-auto" href="{% url 'food_detail' food.id %}">
+                                Ko'rish
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

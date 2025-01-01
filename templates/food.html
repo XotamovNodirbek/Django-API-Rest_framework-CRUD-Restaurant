@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="page-content">
+    <div class="container-fluid">
+
+        <!-- Page Title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box d-flex align-items-center justify-content-between">
+                    <h4 class="mb-0 font-size-18">Foods</h4>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for category in categories %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'category-list-api' %}?id={{ category.id }}">
+                                    {{ category.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>                    
+
+                        <div class="dropdown" style="margin-left: 750px;">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Categories
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                {% for category in categories %}
+                                    <a class="dropdown-item" href="{% url 'categories-url' %}?id={{ category.id }}">
+                                        {{ category.name }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                          </div>
+                    <button type="button" class="btn btn-success waves-effect waves-light" data-toggle="modal"
+                        data-target="#foodCreateModal">Add Food</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Food Cards -->
+        <div class="row">
+            {% for food in foods %}
+            <div class="col-md-4 col-sm-5 mb-4">
+                <div class="card h-100">
+                    <!-- Food Image -->
+                    {% if food.photo %}
+                    <img src="{{ food.photo.url }}" class="card-img-top img-fluid" style="height: 285px;"
+                        alt="{{ food.name }}">
+                    {% else %}
+                    <img src="{% static 'images/default.jpg' %}" class="card-img-top img-fluid" alt="Default Image">
+                    {% endif %}
+
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <h5 class="card-title">{{ food.name }}</h5>
+                        {% if food.is_food_of_day %}
+                        <span class="badge badge-success">Food of the Day</span>
+                        {% endif %}
+                        <p class="card-text">
+                            <strong>Category:</strong> {{ food.category.name }}<br>
+                            <strong>Price:</strong> ${{ food.price }}<br>
+                            {% if food.discount_percent %}
+                            <strong>Discount:</strong> {{ food.discount_percent }}%
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="card-footer text-center">
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                            data-target="#foodUpdateModal{{ food.id }}">Update</button>
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                            data-target="#foodDeleteModal{{ food.id }}">Delete</button>
+                        <a href="{% url 'food-detail-url' pk=food.id %}" class="btn btn-info btn-sm">More Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+<!-- Create Food Modal -->
+<div class="modal fade" id="foodCreateModal" tabindex="-1" role="dialog" aria-labelledby="foodCreateModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="foodCreateModalLabel">Add Food</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data" action="{% url 'food-create-url' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="foodName">Name</label>
+                        <input type="text" class="form-control" id="foodName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodCategory">Category</label>
+                        <select class="form-control" id="foodCategory" name="category" required>
+                            <option value="" disabled selected>Select a category</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodInfo">Info</label>
+                        <textarea class="form-control" id="foodInfo" name="info"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodPrice">Price</label>
+                        <input type="number" class="form-control" id="foodPrice" name="price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodDiscount">Discount (%)</label>
+                        <input type="number" class="form-control" id="foodDiscount" name="discount_percent" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="foodPhoto">Photo</label>
+                        <input type="file" class="form-control-file" id="foodPhoto" name="photo">
+                    </div>
+                    <div class="form-group">
+                        <label for="foodOfDay">Food of the Day</label>
+                        <input type="checkbox" id="foodOfDay" name="is_food_of_day">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

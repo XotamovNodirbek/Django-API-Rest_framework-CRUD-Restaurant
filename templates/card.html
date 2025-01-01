@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: 20px;
+        color: #ff6f61;
+    }
+
+    table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th,
+    td {
+        padding: 12px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #ff6f61;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    a {
+        text-decoration: none;
+        color: #ff6f61;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    p {
+        text-align: center;
+        font-size: 1.2em;
+        margin-top: 20px;
+    }
+
+    .continue-shopping {
+        display: block;
+        width: 200px;
+        margin: 20px auto;
+        padding: 10px;
+        background-color: #ff6f61;
+        color: white;
+        text-align: center;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .continue-shopping:hover {
+        background-color: #ff4a3d;
+    }
+
+    input[type='number'] {
+        width: 60px;
+        padding: 5px;
+        text-align: center;
+    }
+
+    td img {
+        width: 100px; /* You can adjust this as needed */
+        height: auto;
+    }
+</style>
+
+<h2>Your Cart</h2>
+
+{% if cart_items %}
+<table>
+    <thead>
+        <tr>
+            <th>Img</th>
+            <th>Food</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart_items %}
+        <tr>
+            <td><img src="{{ item.food.photo.url }}" alt="{{ item.food.name }}"></td>
+            <td>{{ item.food.name }}</td>
+            <td>{{ item.food.category }}</td>
+            <td>${{ item.food.price }}</td>
+            <td>${{ item.food.discount_percent }}</td>
+            <td>
+                <a href="{% url 'cart-remove' cart_id=item.id %}">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p><strong>Total: </strong>${{ cart_total|floatformat:2 }}</p>
+{% endif %}
+
+<a href="{% url 'food-list' %}" class="continue-shopping">Continue Shopping</a>
+
+{% endblock %}
