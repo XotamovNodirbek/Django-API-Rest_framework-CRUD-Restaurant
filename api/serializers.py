@@ -33,16 +33,15 @@ class CartSerializer(serializers.ModelSerializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
-    food_name = serializers.CharField(source='food.name', read_only=True)  # Oziq-ovqat nomi
-    food_price = serializers.DecimalField(source='food.price', read_only=True, max_digits=8, decimal_places=2)  # Oziq-ovqat narxi
-    discounted_price = serializers.SerializerMethodField()  # Chegirmali narx
+    food_name = serializers.CharField(source='food.name', read_only=True)  
+    food_price = serializers.DecimalField(source='food.price', read_only=True, max_digits=8, decimal_places=2)
+    discounted_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Cart
         fields = ['id', 'food', 'food_name', 'food_price', 'discounted_price', 'quantity']
 
     def get_discounted_price(self, obj):
-        # Agar oziq-ovqatda chegirma bo'lsa, chegirmali narxni hisoblash
         if obj.food.discount_percent:
             return obj.food.price - (obj.food.discount_percent * obj.food.price / 100)
-        return obj.food.price  # Agar chegirma yo'q bo'lsa, asl narxni qaytarish
+        return obj.food.price

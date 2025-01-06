@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-# Model for Category
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
@@ -28,7 +28,7 @@ class Food(models.Model):
         return self.name
 
 
-# Model for Reservation
+
 class Reservation(models.Model):
     name = models.CharField(max_length=100)
     number_of_guests = models.PositiveIntegerField()
@@ -40,7 +40,7 @@ class Reservation(models.Model):
         return f"Reservation for {self.name} on {self.date} at {self.time}"
 
 
-# Model for Cart
+
 class Cart(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     food = models.OneToOneField(Food, on_delete=models.CASCADE)
@@ -59,7 +59,6 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     user_role = models.CharField(max_length=100, choices=USER_ROLE, default='user')
 
-    # Add the related_name to avoid the reverse accessor clash
     groups = models.ManyToManyField('auth.Group', related_name='custom_user_groups', blank=True)
     user_permissions = models.ManyToManyField('auth.Permission', related_name='custom_user_permissions', blank=True)
 

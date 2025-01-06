@@ -12,7 +12,7 @@ def dashboard(request):
     return render(request, 'index.html')
 
 
-# Category Views
+
 def category_view(request):
     categories = Category.objects.all()
     context = {
@@ -43,7 +43,7 @@ def category_delete(request, pk):
     return redirect('categories-url')
 
 
-# Food Views
+
 def food(request):
     foods = Food.objects.all()
     categories = Category.objects.all()
@@ -117,14 +117,14 @@ def food_delete(request, pk):
 
 def food_list(request):
     categories = Category.objects.all()
-    category_id = request.GET.get('category')  # URL orqali kelgan kategoriya ID'si
+    category_id = request.GET.get('category')
 
     if category_id:
-        # Agar kategoriya tanlangan bo‘lsa, filterlash
+        
         foods = Food.objects.filter(category_id=category_id).order_by('-id')
         selected_category = get_object_or_404(Category, id=category_id)
     else:
-        # Agar kategoriya tanlanmagan bo‘lsa, barcha ovqatlarni chiqarish
+        
         foods = Food.objects.all().order_by('-id')
         selected_category = None
 
@@ -136,7 +136,7 @@ def food_list(request):
     return render(request, 'foods.html', context)
 
 
-# Login views
+
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -153,7 +153,7 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
-# Logout view
+
 def logout_view(request):
     logout(request)
     return redirect('login')
@@ -161,25 +161,24 @@ def logout_view(request):
 
 
 def reservation_view(request):
-    reservations = Reservation.objects.all()  # Fetch all reservations
+    reservations = Reservation.objects.all()  
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
-            form.save()  # Save the reservation to the database
-            return redirect('reservation_view')  # Redirect to the same page to refresh the list
+            form.save()  
+            return redirect('reservation_view')
     else:
         form = ReservationForm()
 
-    # Pass the reservations and the form to the template
     return render(request, 'reservation.html', {'form': form, 'reservations': reservations})
 
-# View to create a reservation (used in the modal form)
+
 def create_reservation(request):
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('reservation_view')  # Redirect to reservations page after saving
+            return redirect('reservation_view')
     else:
         form = ReservationForm()
     return render(request, 'reservation.html', {'form': form})
@@ -189,15 +188,14 @@ def update_reservation(request, pk):
     if request.method == 'POST':
         form = ReservationForm(request.POST, instance=reservation)
         if form.is_valid():
-            form.save()  # Save the updated reservation
-            return redirect('reservation_view')  # Redirect to the reservation list
+            form.save()
+            return redirect('reservation_view')
     else:
         form = ReservationForm(instance=reservation)
 
     return render(request, 'reservation_update.html', {'form': form, 'reservation': reservation})
 
-# Delete Reservation
 def delete_reservation(request, pk):
     reservation = get_object_or_404(Reservation, pk=pk)
-    reservation.delete()  # Delete the reservation
-    return redirect('reservation_view')  # Redirect to the res
+    reservation.delete()  
+    return redirect('reservation_view')

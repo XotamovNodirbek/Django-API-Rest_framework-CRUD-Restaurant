@@ -17,10 +17,10 @@ urlpatterns = [
     path('food/update/<int:pk>/', food_update, name='food-update-url'),
     path('food/delete/<int:pk>/', food_delete, name='food-delete-url'),
     #Reservations
-    path('reservation/', reservation_view, name='reservation_view'),  # To display reservations
-    path('reservation/create/', create_reservation, name='reservation_create_url'),  # To create a new reservation
-    path('reservation/update/<int:pk>/', update_reservation, name='reservation_update_url'),  # Update reservation
-    path('reservation/delete/<int:pk>/', delete_reservation, name='reservation_delete_url'),  # Delete reservation
+    path('reservation/', reservation_view, name='reservation_view'),  
+    path('reservation/create/', create_reservation, name='reservation_create_url'),  
+    path('reservation/update/<int:pk>/', update_reservation, name='reservation_update_url'),  
+    path('reservation/delete/<int:pk>/', delete_reservation, name='reservation_delete_url'),  
     #Login
     path('', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
