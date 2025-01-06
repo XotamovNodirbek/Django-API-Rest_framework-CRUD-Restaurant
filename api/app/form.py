@@ -1,6 +1,15 @@
 from django import forms
+from api.models import Reservation
 from api.models import Food, Category
 
+class ReservationForm(forms.ModelForm):
+    class Meta:
+        model = Reservation
+        fields = ['name', 'number_of_guests', 'date', 'time']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'time': forms.TimeInput(attrs={'type': 'time'}),
+        }
 class FoodForm(forms.ModelForm):
     class Meta:
         model = Food

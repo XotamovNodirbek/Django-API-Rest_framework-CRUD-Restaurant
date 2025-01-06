@@ -121,7 +121,7 @@
             <div data-simplebar class="h-100">
 
                 <div class="navbar-brand-box">
-                    <a href="index.html" class="logo">
+                    <a href="{% url 'dashboard-url' %}" class="logo">
                         <i class="mdi mdi-alpha-n-circle"></i>
                         <span>
                             Nique
@@ -146,7 +146,7 @@
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="{% url 'categories-url' %}">Categories</a></li>
                                 <li><a href="{% url 'foods-url' %}">Foods</a></li>
-                                <li><a href="">Reservation</a></li>
+                                <li><a href="{% url 'reservation_view' %}">Reservation</a></li>
                             </ul>
                         </li>                        
                     </ul>

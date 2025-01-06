@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from api.models import Category, Food
+from api.models import Category, Food, Reservation
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib.auth.forms import AuthenticationForm
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from .form import ReservationForm
 
 def dashboard(request):
     return render(request, 'index.html')
@@ -113,6 +114,28 @@ def food_delete(request, pk):
     return redirect('foods-url')
 
 
+
+def food_list(request):
+    categories = Category.objects.all()
+    category_id = request.GET.get('category')  # URL orqali kelgan kategoriya ID'si
+
+    if category_id:
+        # Agar kategoriya tanlangan bo‘lsa, filterlash
+        foods = Food.objects.filter(category_id=category_id).order_by('-id')
+        selected_category = get_object_or_404(Category, id=category_id)
+    else:
+        # Agar kategoriya tanlanmagan bo‘lsa, barcha ovqatlarni chiqarish
+        foods = Food.objects.all().order_by('-id')
+        selected_category = None
+
+    context = {
+        'foods': foods,
+        'categories': categories,
+        'selected_category': selected_category
+    }
+    return render(request, 'foods.html', context)
+
+
 # Login views
 def login_view(request):
     if request.method == 'POST':
@@ -136,9 +159,45 @@ def logout_view(request):
     return redirect('login')
 
 
-# Cart Views (Savat)
 
+def reservation_view(request):
+    reservations = Reservation.objects.all()  # Fetch all reservations
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save the reservation to the database
+            return redirect('reservation_view')  # Redirect to the same page to refresh the list
+    else:
+        form = ReservationForm()
 
+    # Pass the reservations and the form to the template
+    return render(request, 'reservation.html', {'form': form, 'reservations': reservations})
 
-# Cart views (django view functions)
+# View to create a reservation (used in the modal form)
+def create_reservation(request):
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('reservation_view')  # Redirect to reservations page after saving
+    else:
+        form = ReservationForm()
+    return render(request, 'reservation.html', {'form': form})
 
+def update_reservation(request, pk):
+    reservation = get_object_or_404(Reservation, pk=pk)
+    if request.method == 'POST':
+        form = ReservationForm(request.POST, instance=reservation)
+        if form.is_valid():
+            form.save()  # Save the updated reservation
+            return redirect('reservation_view')  # Redirect to the reservation list
+    else:
+        form = ReservationForm(instance=reservation)
+
+    return render(request, 'reservation_update.html', {'form': form, 'reservation': reservation})
+
+# Delete Reservation
+def delete_reservation(request, pk):
+    reservation = get_object_or_404(Reservation, pk=pk)
+    reservation.delete()  # Delete the reservation
+    return redirect('reservation_view')  # Redirect to the res

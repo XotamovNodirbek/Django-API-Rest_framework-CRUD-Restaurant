@@ -46,7 +46,6 @@
                 <!-- Savatga qo'shish -->
                 <form method="POST" action="{% url 'add_to_cart' food.id %}" class="d-flex">
                     {% csrf_token %}
-                    <input class="form-control text-center me-3" name="quantity" type="number" value="1" min="1" style="max-width: 3rem" />
                     <button class="btn btn-outline-dark flex-shrink-0" type="submit">
                         <a href="{% url 'add_to_cart' food.id %}">Savatga qo'shish</a>
                     </button>
