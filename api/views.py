@@ -7,7 +7,7 @@ from .models import Category, Food, Reservation, Cart
 from django.contrib.auth.decorators import login_required
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-
+from django.contrib import messages
 @api_view(["GET"])  
 def category_list_api(request):
     categories = Category.objects.all()
@@ -151,3 +151,8 @@ class CartCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+
+
+

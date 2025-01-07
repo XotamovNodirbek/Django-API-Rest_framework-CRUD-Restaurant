@@ -72,44 +72,10 @@
                             </a>
                         </div>
                     </div>
-
-                    <div class="dropdown d-inline-block ml-2">
-                        <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="rounded-circle header-profile-user" src="{% static 'assets/images/users/avatar-3.jpg' %}"
-                                alt="Header Avatar">
-                            <span class="d-none d-sm-inline-block ml-1">Jamie D.</span>
-                            <i class="mdi mdi-chevron-down d-none d-sm-inline-block"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
-                                <span>Inbox</span>
-                                <span>
-                                    <span class="badge badge-pill badge-info">3</span>
-                                </span>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
-                                <span>Profile</span>
-                                <span>
-                                    <span class="badge badge-pill badge-warning">1</span>
-                                </span>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
-                                Settings
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center justify-content-between"
-                                href="javascript:void(0)">
-                                <span>Lock Account</span>
-                            </a>
                             <form method="POST" action="{% url 'logout' %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-primary">Logout</button>
                             </form>
-                        </div>
-                    </div>
 
                 </div>
             </div>
@@ -134,11 +100,6 @@
                     <!-- Left Menu Start -->
                     <ul class="metismenu list-unstyled" id="side-menu">
                         <li class="menu-title">Menu</li>
-
-                        <li>
-                            <a href="{% url 'dashboard-url' %}" class="waves-effect"><i class="feather-airplay"></i>
-                                <span>Dashboard</span></a>
-                        </li>
 
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect"><i

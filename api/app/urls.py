@@ -1,6 +1,5 @@
 from django.urls import path
 from api.app.views import *
-
 urlpatterns = [
     # Dashboard
     path('dashboard', dashboard, name='dashboard-url'),
@@ -24,4 +23,6 @@ urlpatterns = [
     #Login
     path('', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
+    path('continue-cart/', continue_cart, name='sucsess-cart'),  # Continue shopping URL
+
 ]

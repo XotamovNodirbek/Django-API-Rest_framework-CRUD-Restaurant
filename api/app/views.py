@@ -7,7 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .form import ReservationForm
-
+from django.contrib import messages
 def dashboard(request):
     return render(request, 'index.html')
 
@@ -199,3 +199,12 @@ def delete_reservation(request, pk):
     reservation = get_object_or_404(Reservation, pk=pk)
     reservation.delete()  
     return redirect('reservation_view')
+
+
+
+def continue_cart(request):
+    # Xabarni qo'shish
+    messages.success(request, 'Food item added to cart successfully! Your food will be delivered in 30 minutes.')
+    
+    # Foydalanuvchini shopping sahifasiga yo'naltirish
+    return render(request, 'sucsess_cart.html')  # food-list bu shopping sahifasi URL nomi

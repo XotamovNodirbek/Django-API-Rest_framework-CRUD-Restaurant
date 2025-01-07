@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+from .views import add_to_cart, cart_view, cart_remove
 urlpatterns = [
     # Category URLs
     path('api/categories/', views.category_list_api, name='category-list-api'),  
@@ -24,9 +24,9 @@ urlpatterns = [
     path('api/reservations/<int:pk>/delete/', views.reservation_delete, name='reservation-delete'),  
 
     # Cart URLs
-    path('cart/add/<int:food_id>/', views.add_to_cart, name='add_to_cart'),  
-    path('cart/', views.cart_view, name='cart-view'),  
-    path('cart/remove/<int:cart_id>/', views.cart_remove, name='cart-remove'),  
+    path('cart/add/<int:food_id>/', add_to_cart, name='add_to_cart'),  
+    path('cart/', cart_view, name='cart-view'),  
+    path('cart/remove/<int:cart_id>/', cart_remove, name='cart-remove'),  
 
     # Cart API Views
     path('api/cart/', views.CartListView.as_view(), name='cart-api-list'),
